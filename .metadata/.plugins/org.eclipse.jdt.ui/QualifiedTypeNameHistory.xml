@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="objects.MenuSelector"/>
+<fullyQualifiedTypeName name="java.awt.image.BufferedImage"/>
+<fullyQualifiedTypeName name="pack.Game"/>
+<fullyQualifiedTypeName name="java.awt.Image"/>
+<fullyQualifiedTypeName name="framework.ObjectId"/>
+<fullyQualifiedTypeName name="objects.HUD"/>
+<fullyQualifiedTypeName name="objects.BossBattle"/>
+<fullyQualifiedTypeName name="objects.Player"/>
+<fullyQualifiedTypeName name="framework.KeyInput"/>
+<fullyQualifiedTypeName name="java.util.Random"/>
+<fullyQualifiedTypeName name="pack.Camera"/>
+<fullyQualifiedTypeName name="objects.Stone"/>
+<fullyQualifiedTypeName name="objects.Boss1"/>
+<fullyQualifiedTypeName name="objects.Coin"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="java.awt.Font"/>
+<fullyQualifiedTypeName name="pack.Handler"/>
+<fullyQualifiedTypeName name="objects.NextWorld"/>
+<fullyQualifiedTypeName name="objects.Globe"/>
+<fullyQualifiedTypeName name="objects.Spikeball"/>
+<fullyQualifiedTypeName name="objects.Boss2"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="objects.Boss3"/>
+<fullyQualifiedTypeName name="objects.MovingPlatform"/>
+<fullyQualifiedTypeName name="objects.Boss4"/>
+<fullyQualifiedTypeName name="objects.Boss6"/>
+<fullyQualifiedTypeName name="objects.Boss7"/>
+<fullyQualifiedTypeName name="objects.Portal"/>
+<fullyQualifiedTypeName name="java.awt.Toolkit"/>
+</qualifiedTypeNameHistroy>

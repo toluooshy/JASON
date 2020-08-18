@@ -1,0 +1,378 @@
+package pack;
+
+
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+
+import objects.Block;
+import objects.Boss1;
+import objects.Boss2;
+import objects.Boss3;
+import objects.Boss4;
+import objects.BossBattle;
+import objects.Coin;
+import objects.Flag;
+import objects.Globe;
+import objects.HUD;
+import objects.MenuSelector;
+import objects.MovingPlatform;
+import objects.NextWorld;
+import objects.Player;
+import objects.Restart;
+import objects.Spikeball;
+import objects.Stone;
+import framework.GameObject;
+import framework.ObjectId;
+
+public class Handler 
+{
+
+	public LinkedList<GameObject> object = new LinkedList<GameObject>();
+
+	private GameObject tempObject;
+	
+	private Camera cam;
+	
+	private BufferedImage level0 = null;
+	private BufferedImage level1 = null;
+	private BufferedImage level2 = null;
+	private BufferedImage level3 = null;
+	private BufferedImage w1boss = null;
+	private BufferedImage w1finish = null;
+	private BufferedImage level4 = null;
+	private BufferedImage level5 = null;
+	private BufferedImage level6 = null;
+	private BufferedImage w2boss = null;
+	private BufferedImage w2finish = null;
+	private BufferedImage level7 = null;
+	private BufferedImage level8 = null;
+	private BufferedImage level9 = null;
+	private BufferedImage w3boss = null;
+	private BufferedImage w3finish = null;
+	private BufferedImage level10 = null;
+	private BufferedImage level11 = null;
+	private BufferedImage level12 = null;
+	private BufferedImage w4boss = null;
+	private BufferedImage w4finish = null;
+	
+	
+	public Handler(Camera cam){
+		this.cam = cam;
+		
+		BufferedImageLoader loader = new BufferedImageLoader();
+		level0 = loader.loadImage("/lvl0-0.png");
+		level1 = loader.loadImage("/lvl1-1.png");
+		level2 = loader.loadImage("/lvl1-2.png");
+		level3 = loader.loadImage("/lvl1-3.png");
+		w1boss = loader.loadImage("/lvl1-boss.png");
+		w1finish = loader.loadImage("/lvl1-end.png");
+		level4 = loader.loadImage("/lvl2-1.png");
+		level5 = loader.loadImage("/lvl2-2.png");
+		level6 = loader.loadImage("/lvl2-3.png");
+		w2boss = loader.loadImage("/lvl2-boss.png");
+		w2finish = loader.loadImage("/lvl2-end.png");
+		level7 = loader.loadImage("/lvl3-1.png");
+		level8 = loader.loadImage("/lvl3-2.png");
+		level9 = loader.loadImage("/lvl3-3.png");
+		w3boss = loader.loadImage("/lvl3-boss.png");
+		w3finish = loader.loadImage("/lvl3-end.png");
+		level10 = loader.loadImage("/lvl4-1.png");
+		level11 = loader.loadImage("/lvl4-2.png");
+		level12 = loader.loadImage("/lvl4-3.png");
+		//w4boss = loader.loadImage("/lvl4-boss.png");
+		//w4finish = loader.loadImage("/lvl4-end.png");
+		
+	}
+
+	public void tick()
+	{
+	for(int i = 0; i < object.size(); i++)
+	{
+			tempObject = object.get(i);
+
+			tempObject.tick(object);
+	
+		}
+	}
+
+	public void render(Graphics g){
+	for(int i = 0; i < object.size(); i++)
+	{
+			tempObject = object.get(i);
+
+			tempObject.render(g);
+			
+		}
+	}
+	
+	public void LoadImageLevel(BufferedImage image){
+		int w = image.getWidth();
+		int h = image.getHeight();
+		
+		
+		for(int xx = 0; xx < h; xx++){
+			for(int yy = 0; yy < w; yy++){
+				int pixel = image.getRGB(xx, yy);
+				int red = (pixel >> 16) & 0xff;
+				int green = (pixel >> 8) & 0xff;
+				int blue = (pixel) & 0xff;
+				
+				if(red == 255 && green == 0 & blue == 255) addObject(new BossBattle(xx*32, yy*32, ObjectId.BossBattle));
+				if(red == 0 && green == 255 & blue == 0) addObject(new Flag(xx*32, yy*32, ObjectId.Flag));
+				if(red == 255 && green == 0 & blue == 0) addObject(new Restart(xx*32, yy*32, ObjectId.Restart));
+				if(red == 0 && green == 0 & blue == 255) addObject(new Player(xx*32, yy*32, this, cam, ObjectId.Player));
+				if(red == 185 && green == 122 & blue == 87) addObject(new Boss1(xx*30, yy*30, ObjectId.Boss1, this));
+				if(red == 185 && green == 122 & blue == 86) addObject(new Boss2(xx*30, yy*30, ObjectId.Boss2, this));
+				if(red == 185 && green == 122 & blue == 85) addObject(new Boss3(xx*30, yy*30, ObjectId.Boss3, this));
+				if(red == 185 && green == 122 & blue == 84) addObject(new Boss4(xx*30, yy*30, ObjectId.Boss4, this));
+				//if(red == 185 && green == 122 & blue == 83) addObject(new Boss5(xx*30, yy*30, ObjectId.Boss5, this));
+				//if(red == 185 && green == 122 & blue == 82) addObject(new Boss6(xx*30, yy*30, ObjectId.Boss6, this));
+				//if(red == 185 && green == 122 & blue == 81) addObject(new Boss7(xx*30, yy*30, ObjectId.Boss7, this));
+				if(red == 200 && green == 200 & blue == 200) addObject(new MenuSelector(xx*30, yy*30, ObjectId.MenuSelector));
+				if(red == 255 && green == 174 & blue == 201) addObject(new Stone(xx*32, yy*32, ObjectId.Stone, this));
+				if(red == 254 && green == 174 & blue == 201) addObject(new Spikeball(xx*32, yy*32, ObjectId.Spikeball, this));
+				if(red == 239 && green == 228 & blue == 176) addObject(new MovingPlatform(xx*32, yy*32, ObjectId.MovingPlatform, this));
+				if(red == 255 && green == 201 & blue == 14) addObject(new Coin(xx*32, yy*32, ObjectId.Coin, this));
+				if(red == 163 && green == 73 & blue == 164) addObject(new NextWorld(xx*32, yy*32, ObjectId.NextWorld, this));
+				if(red == 0 && green == 255 & blue == 255) addObject(new Globe(xx*32, yy*32, ObjectId.Globe));
+				if(red == 255 && green == 127 & blue == 39) addObject(new HUD(xx*32, yy*32, 1, ObjectId.HUD));
+				if(red == 255 && green == 255 & blue == 255) addObject(new Block(xx*32, yy*32, 0, ObjectId.Block));
+				if(red == 254 && green == 254 & blue == 254) addObject(new Block(xx*32, yy*32, 1, ObjectId.Block));
+				if(red == 253 && green == 253 & blue == 253) addObject(new Block(xx*32, yy*32, 2, ObjectId.Block));
+				if(red == 252 && green == 252 & blue == 252) addObject(new Block(xx*32, yy*32, 3, ObjectId.Block));
+				if(red == 251 && green == 251 & blue == 251) addObject(new Block(xx*32, yy*32, 4, ObjectId.Block));
+				if(red == 250 && green == 250 & blue == 250) addObject(new Block(xx*32, yy*32, 5, ObjectId.Block));
+				if(red == 249 && green == 249 & blue == 249) addObject(new Block(xx*32, yy*32, 6, ObjectId.Block));
+				if(red == 248 && green == 248 & blue == 248) addObject(new Block(xx*32, yy*32, 7, ObjectId.Block));
+				if(red == 247 && green == 247 & blue == 247) addObject(new Block(xx*32, yy*32, 8, ObjectId.Block));
+				if(red == 246 && green == 246 & blue == 246) addObject(new Block(xx*32, yy*32, 9, ObjectId.Block));
+				if(red == 245 && green == 245 & blue == 245) addObject(new Block(xx*32, yy*32, 10, ObjectId.Block));
+				if(red == 244 && green == 244 & blue == 244) addObject(new Block(xx*32, yy*32, 11, ObjectId.Block));
+				if(red == 243 && green == 243 & blue == 243) addObject(new Block(xx*32, yy*32, 12, ObjectId.Block));
+				if(red == 242 && green == 242 & blue == 242) addObject(new Block(xx*32, yy*32, 13, ObjectId.Block));
+				if(red == 241 && green == 241 & blue == 241) addObject(new Block(xx*32, yy*32, 14, ObjectId.Block));
+				if(red == 240 && green == 240 & blue == 240) addObject(new Block(xx*32, yy*32, 15, ObjectId.Block));
+				if(red == 239 && green == 239 & blue == 239) addObject(new Block(xx*32, yy*32, 16, ObjectId.Block));
+				if(red == 238 && green == 238 & blue == 238) addObject(new Block(xx*32, yy*32, 17, ObjectId.Block));
+				if(red == 237 && green == 237 & blue == 237) addObject(new Block(xx*32, yy*32, 18, ObjectId.Block));
+				if(red == 236 && green == 236 & blue == 236) addObject(new Block(xx*32, yy*32, 19, ObjectId.Block));
+				if(red == 235 && green == 235 & blue == 235) addObject(new Block(xx*32, yy*32, 20, ObjectId.Block));
+				if(red == 234 && green == 234 & blue == 234) addObject(new Block(xx*32, yy*32, 21, ObjectId.Block));
+				if(red == 233 && green == 233 & blue == 233) addObject(new Block(xx*32, yy*32, 22, ObjectId.Block));
+				if(red == 232 && green == 232 & blue == 232) addObject(new Block(xx*32, yy*32, 23, ObjectId.Block));
+				if(red == 231 && green == 231 & blue == 231) addObject(new Block(xx*32, yy*32, 24, ObjectId.Block));
+				if(red == 230 && green == 230 & blue == 230) addObject(new Block(xx*32, yy*32, 25, ObjectId.Block));
+				if(red == 229 && green == 229 & blue == 229) addObject(new Block(xx*32, yy*32, 26, ObjectId.Block));
+				if(red == 228 && green == 228 & blue == 228) addObject(new Block(xx*32, yy*32, 27, ObjectId.Block));
+				if(red == 227 && green == 227 & blue == 227) addObject(new Block(xx*32, yy*32, 28, ObjectId.Block));
+				if(red == 226 && green == 226 & blue == 226) addObject(new Block(xx*32, yy*32, 29, ObjectId.Block));
+				if(red == 225 && green == 225 & blue == 225) addObject(new Block(xx*32, yy*32, 30, ObjectId.Block));
+				if(red == 224 && green == 224 & blue == 224) addObject(new Block(xx*32, yy*32, 31, ObjectId.Block));
+				if(red == 223 && green == 223 & blue == 223) addObject(new Block(xx*32, yy*32, 32, ObjectId.Block));
+				if(red == 222 && green == 222 & blue == 222) addObject(new Block(xx*32, yy*32, 33, ObjectId.Block));
+				if(red == 221 && green == 221 & blue == 221) addObject(new Block(xx*32, yy*32, 34, ObjectId.Block));
+				if(red == 220 && green == 220 & blue == 220) addObject(new Block(xx*32, yy*32, 35, ObjectId.Block));
+				if(red == 219 && green == 219 & blue == 219) addObject(new Block(xx*32, yy*32, 36, ObjectId.Block));
+				if(red == 218 && green == 218 & blue == 218) addObject(new Block(xx*32, yy*32, 37, ObjectId.Block));
+				if(red == 217 && green == 217 & blue == 217) addObject(new Block(xx*32, yy*32, 38, ObjectId.Block));
+				if(red == 216 && green == 216 & blue == 216) addObject(new Block(xx*32, yy*32, 39, ObjectId.Block));
+				if(red == 215 && green == 215 & blue == 215) addObject(new Block(xx*32, yy*32, 40, ObjectId.Block));
+				if(red == 214 && green == 214 & blue == 214) addObject(new Block(xx*32, yy*32, 41, ObjectId.Block));
+				if(red == 213 && green == 213 & blue == 213) addObject(new Block(xx*32, yy*32, 42, ObjectId.Block));
+				if(red == 212 && green == 212 & blue == 212) addObject(new Block(xx*32, yy*32, 43, ObjectId.Block));
+				
+			}
+		}
+	}
+	
+	
+
+	public void switchLevel(){
+		clearlevel();
+		cam.setX(0);
+		BufferedImageLoader loader = new BufferedImageLoader();
+		
+		switch(Game.LEVEL)
+		{
+		case 1:
+			LoadImageLevel(level2);
+			break;
+	
+		case 2:
+			LoadImageLevel(level3);
+			break;
+			
+		case 3:
+			LoadImageLevel(w1boss);
+			break;
+			
+		case 4:
+			LoadImageLevel(w1finish);
+			break;
+			
+		case 5:
+			LoadImageLevel(level4);
+			break;
+	
+		case 6:
+			LoadImageLevel(level5);
+			break;
+			
+		case 7:
+			LoadImageLevel(level6);
+			break;
+			
+		case 8:
+			LoadImageLevel(w2boss);
+			break;
+		
+		case 9:
+			LoadImageLevel(w2finish);
+			break;
+			
+		case 10:
+			LoadImageLevel(level7);
+			break;
+	
+		case 11:
+			LoadImageLevel(level8);
+			break;
+			
+		case 12:
+			LoadImageLevel(level9);
+			break;
+			
+		case 13:
+			LoadImageLevel(w3boss);
+			break;
+		
+		case 14:
+			LoadImageLevel(w3finish);
+			break;
+			
+		case 15:
+			LoadImageLevel(level10);
+			break;
+	
+		case 16:
+			LoadImageLevel(level11);
+			break;
+			
+		case 17:
+			LoadImageLevel(level12);
+			break;
+			
+		case 18:
+			LoadImageLevel(w4boss);
+			break;
+		
+		case 19:
+			LoadImageLevel(w4finish);
+			break;
+
+		}
+		
+		Game.LEVEL++;
+	}
+	
+	public void restartLevel(){
+		clearlevel();
+		cam.setX(0);
+		
+		switch(Game.LEVEL)
+		{
+		case 1:
+			LoadImageLevel(level1);
+			break;
+			
+		case 2:
+			LoadImageLevel(level2);
+			break;
+	
+		case 3:
+			LoadImageLevel(level3);
+			break;
+			
+		case 4:
+			LoadImageLevel(w1boss);
+			break;
+			
+		case 5:
+			LoadImageLevel(w1finish);
+			break;
+	
+		case 6:
+			LoadImageLevel(level4);
+			break;
+	
+		case 7:
+			LoadImageLevel(level5);
+			break;
+			
+		case 8:
+			LoadImageLevel(level6);
+			break;
+			
+		case 9:
+			LoadImageLevel(w2boss);
+			break;
+		
+		case 10:
+			LoadImageLevel(w2finish);
+			break;
+		
+		case 11:
+			LoadImageLevel(level7);
+			break;
+	
+		case 12:
+			LoadImageLevel(level8);
+			break;
+			
+		case 13:
+			LoadImageLevel(level9);
+			break;
+			
+		case 14:
+			LoadImageLevel(w3boss);
+			break;
+		
+		case 15:
+			LoadImageLevel(w3finish);
+			break;
+			
+		case 16:
+			LoadImageLevel(level10);
+			break;
+	
+		case 17:
+			LoadImageLevel(level11);
+			break;
+			
+		case 18:
+			LoadImageLevel(level12);
+			break;
+			
+		case 19:
+			LoadImageLevel(w4boss);
+			break;
+		
+		case 20:
+			LoadImageLevel(w4finish);
+			break;
+			
+		}
+	}
+
+	public void clearlevel(){
+		this.object.clear();
+	}
+
+	public void addObject(GameObject object){
+		this.object.add(object);
+	}
+	public void removeObject(GameObject object){
+		this.object.remove(object);
+	}
+}

@@ -1,0 +1,178 @@
+package objects;
+
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.util.LinkedList;
+
+import pack.Animation;
+import pack.Camera;
+import pack.Game;
+import pack.Handler;
+import framework.GameObject;
+import framework.KeyInput;
+import framework.ObjectId;
+import framework.Texture;
+
+
+
+public class Boss1 extends GameObject {
+	
+	private float width = 64, height = 64;
+	
+	private float gravity = 0.5f;
+	private final float MAX_SPEED = 10;
+
+
+	Texture tex = Game.getInstance();
+	
+	private Animation boss1Walk, boss1WalkLeft;
+	
+	Handler handler;
+	
+	private BufferedImage menu;
+	
+	boolean rcollision = false;
+	boolean lcollision = false;
+	boolean tcollision = false;
+	
+	public Boss1(int x, int y, ObjectId id, Handler handler) {
+		super(x, y, id);
+		this.handler = handler;
+		menu = tex.menu[0];
+		boss1Walk = new Animation(2,tex.boss1[1], tex.boss1[2], tex.boss1[3]);
+		boss1WalkLeft = new Animation(2,tex.player[6], tex.player[5], tex.player[4]);
+		
+	}
+	
+	public void tick(LinkedList<GameObject> object) {
+		x += velX;
+		y += velY;
+		
+		if(velX < 0) facing = -1;
+		else if(velX > 0) facing = 1;
+		
+		if(falling || jumping)
+		{
+			velY += gravity;
+			
+			if(velY > MAX_SPEED)
+				velY = MAX_SPEED;
+
+		}	
+		
+		Collision(object);
+		
+		
+		boss1Walk.runAnimation();
+		boss1WalkLeft.runAnimation();
+		
+		System.out.println("x" + x);
+		
+	}
+		
+	
+	private void Collision(LinkedList<GameObject> object)
+	{
+		for(int i = 0; i < handler.object.size(); i++)
+		{
+			GameObject tempObject = handler.object.get(i);
+			
+			if(tempObject.getId() == ObjectId.Block)
+			{
+				
+				if(x > Player.xtracker || x > 800){
+					velX = 0;
+					velX = -4;
+					System.out.println(Player.xtracker);
+				}
+				
+				if(x < Player.xtracker || x < 280){
+					velX = 0;
+					velX = 4;
+					System.out.println(Player.xtracker);
+				}
+			
+				if(getBoundsTop().intersects(tempObject.getBounds())){
+					y = tempObject.getY() + 32;
+					velY = 0;
+					tcollision = true;
+				}
+				
+				if(getBounds().intersects(tempObject.getBounds())){
+					y = tempObject.getY() - height;
+					velY = 0;
+					falling = false;
+					jumping = false;
+				}else
+					falling = true;
+				
+				//Right
+				if(getBoundsRight().intersects(tempObject.getBounds())){
+					x = tempObject.getX() - width;
+					rcollision = true; 
+					lcollision = false;
+					Player.xtracker = KeyInput.xstop;
+				}
+				//Left
+				if(getBoundsLeft().intersects(tempObject.getBounds())){
+					x = tempObject.getX() + 35;
+					rcollision = false; 
+					lcollision = true;
+					Player.xtracker = KeyInput.xstop;
+				}else{
+					rcollision = false;
+					lcollision = false;
+					tcollision = false;
+				}
+			}
+			if(tempObject.getId() == ObjectId.Player)
+			{
+				velX = 0;
+			}
+		}
+	}
+
+	public void render(Graphics g) {
+		if(jumping){
+			if(facing == 1)
+				g.drawImage(tex.boss1_jump[0], (int)x, (int)y, 64, 64, null);
+			else if(facing == -1)
+				g.drawImage(tex.boss1_jump[1], (int)x, (int)y, 64, 64, null);
+			}else{
+			
+			if(velX != 0){
+				if(facing == 1)
+					boss1Walk.drawAnimation(g,(int)x, (int)y, 64, 64);
+				else
+					boss1WalkLeft.drawAnimation(g,(int)x, (int)y, 64, 64);
+			}else{
+				if(facing == 1)
+					g.drawImage(tex.boss1[0], (int)x, (int)y, 64, 64, null);
+				else if(facing == -1)
+					g.drawImage(tex.boss1[7], (int)x, (int)y, 64, 64, null);
+			}
+		}	
+	}
+
+	
+	public Rectangle getBounds() {
+		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int) ((int)y+(height/2)), (int)width/2, (int)height/2);
+	}
+	public Rectangle getBoundsTop() {
+		return new Rectangle((int) ((int)x+(width/2)-((width/2)/2)), (int)y, (int)width/2, (int)height/2);
+	}
+	public Rectangle getBoundsRight() {
+		return new Rectangle((int) ((int)x+width-5), (int)y+5, (int)5, (int)height-10);
+	}
+	public Rectangle getBoundsLeft() {
+		return new Rectangle((int)x, (int)y+5, (int)5, (int)height-10);
+	}
+
+	
+	
+
+
+}
